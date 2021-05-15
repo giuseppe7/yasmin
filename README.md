@@ -13,3 +13,4 @@ More to come.
 ## References
 1. https://github.com/golang-standards/project-layout
 1. https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
+1. https://api.slack.com/docs/sign-in-with-slack

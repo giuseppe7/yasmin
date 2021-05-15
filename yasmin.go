@@ -10,6 +10,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/giuseppe7/yasmin/internal/pkg/workers"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -31,7 +32,7 @@ func initObservability() {
 	versionGauge := prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: applicationNamespace,
-			Name:      applicationNamespace + "_info",
+			Name:      "version_info",
 			Help:      "Version of the application.",
 		},
 	)
@@ -58,6 +59,11 @@ func main() {
 	initObservability()
 
 	// Do the work.
+	worker, err := workers.NewSlackWorker()
+	if err != nil {
+		log.Fatalf("initialization error with NewSlackWorker. %s", err.Error())
+	}
+	go worker.DoWork()
 
 	// Function and waiter to wait for the OS interrupt and do any clean-up.
 	go func() {

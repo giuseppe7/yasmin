@@ -1,0 +1,48 @@
+version: '3'
+networks:
+  yasmin-net:
+    driver: bridge
+volumes:
+    yasmin_prometheus_data: {}
+    yasmin_grafana_data: {}
+services:
+  yasmin:
+    image: yasmin:latest
+    container_name: yasmin-main
+    ports:
+      - "2112"
+    networks:
+      - yasmin-net
+    environment:
+      - SLACK_TOKEN=${SLACK_TOKEN}
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: yasmin-prom
+    volumes:
+      - yasmin_prometheus_data:/prometheus
+      - ../configs/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=31d'
+      - '--web.enable-lifecycle'
+    # restart: unless-stopped
+    ports:
+      - "9090"
+    networks:
+      - yasmin-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: yasmin-grafana
+    #restart: unless-stopped
+    volumes:
+      - yasmin_grafana_data:/var/lib/grafana
+      - ../configs/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000"
+    networks:
+      - yasmin-net
