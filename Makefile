@@ -27,7 +27,7 @@ local: container
 	docker ps | grep yasmin
 
 clean-local:
-	docker-compose -f ./deployments/docker-compose.yaml --project-name yasmin down
+	docker compose -f ./deployments/docker-compose.yaml --project-name yasmin down
 
 all: build test review
 	@echo
