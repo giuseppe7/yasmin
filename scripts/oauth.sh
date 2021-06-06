@@ -15,6 +15,7 @@ if [[ -z "${CLIENT_ID}" || -z "{$CLIENT_SECRET}" ]]; then
 fi
 USER_SCOPE='identity.basic,identity.team'
 
+  #curl -is "https://slack.com/oauth/v2/authorize?user_scope=${USER_SCOPE}&client_id=${CLIENT_ID}&tracked=1" \
 printf '\n'
 printf '1. Authorization Request. Opening authorization URL to grant access and receive grant URL with code...\n'
 LOCATION=$(
@@ -51,12 +52,6 @@ printf '\nOAUTH flow successful.\n'
 printf '\n'
 printf '3. Protected Resource. Invoking the API with obtained token...\n'
 RESULT=$( curl -s "https://slack.com/api/users.identity" -H "Authorization: Bearer ${ACCESS_TOKEN}" )
-echo ${RESULT} | jq
-
-# Request the the api.test for good measure.
-printf '\n'
-printf '4. Protected Resource. Invoking the api.test endpoint...\n'
-RESULT=$( curl -s "https://slack.com/api/api.test" --request POST -H "Content-type: application/json" -H "Authorization: Bearer ${YASMIN_ACCESS_TOKEN}" )
 echo ${RESULT} | jq
 
 # All set, use these below.

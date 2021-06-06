@@ -20,3 +20,7 @@ echo ${RESULT} | jq
 printf '\nInvoking the users.identity endpoint...\n'
 RESULT=$( curl -s "https://slack.com/api/users.identity" -H "Content-type: application/json" -H "Authorization: Bearer ${YASMIN_ACCESS_TOKEN}" )
 echo ${RESULT} | jq
+
+printf '\nInvoking the conversations.list endpoint...\n'
+RESULT=$( curl -s "https://slack.com/api/conversations.list?limit=50" -H "Content-type: application/json" -H "Authorization: Bearer ${YASMIN_ACCESS_TOKEN}" )
+echo ${RESULT} | jq
